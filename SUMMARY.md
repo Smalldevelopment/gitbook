@@ -6,4 +6,6 @@
 * [AFN源码详解](afnxiang-jie.md)
 * [Runtime学习笔记](runtimexue-xi-bi-ji.md)
 * [iTerm2](iterm2.md)
+* [Pod](pod.md)
+* [位、字节](wei-3001-zi-jie.md)
 
