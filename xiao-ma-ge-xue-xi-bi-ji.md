@@ -54,8 +54,6 @@ int main(int argc, char * argv[]) {
 }
 ```
 
-
-
 #### KVC
 
 ```
@@ -65,19 +63,17 @@ int main(int argc, char * argv[]) {
  }];
 ```
 
- setValue:forkey实现原理 
+setValue:forkey实现原理
 
 1、先查看有没有对应key值得set方法,如果有set方法，就给对应的属性赋值
 
- 2、如果没有set方法，就去查看有没有跟key值相同并且带有下划线的成员属性，如果有的话，就给带有下划线的成员属性赋值 
+2、如果没有set方法，就去查看有没有跟key值相同并且带有下划线的成员属性，如果有的话，就给带有下划线的成员属性赋值
 
 3、如果咩有跟key值相同并且带有下划线的成员属性，还会去找有没有跟key值相同的名称的成员属性，如果有，就给他赋值
 
 4、如果没有直接报错
 
-
-
-#### 字符串copy和strong 
+#### 字符串copy和strong
 
 字符串用copy原因外界修改不会改变字符串的值，在strong中的set方法是 \_name = name;而在copy方法中是\_name = \[name copy\];如果name是可变字符串就执行copy，如果不是就直接赋值
 
@@ -90,8 +86,6 @@ int main(int argc, char * argv[]) {
 
 其中`initWithRootViewController`就是调用`[nav pushViewController:nil animated:YES]`方法来进行操作的
 
-
-
 #### View的声明周期
 
 1. ViewDidLoad\(懒加载,如果没释放只会调用一次\)
@@ -102,15 +96,13 @@ int main(int argc, char * argv[]) {
 6. VIewDidLayoutSubviews
 7. ViewDidAppear
 
-
-
 #### storyboard跳转
 
 1. 连线跳转 `[self performSegueWithIdentifier:@"" sender:nil];`
 
 **performSegueWithIdentifier底层实现**
 
- 1、到storyboard当中去查找有没有给定标识的segue
+1、到storyboard当中去查找有没有给定标识的segue
 
 2、根据指定的标识，创建一个UIStoryboardSegue对象，把当前的控制器设置为UIStoryboardSegue的源控制器属性赋值（segue.sourceViewController），
 
@@ -122,17 +114,113 @@ int main(int argc, char * argv[]) {
 
 
 
+#### block
+
+`inline` 是快速敲出一个block的快捷
+
+block类型       
+//nameBlock 类型名
+
+`typedefvoid(^nameBlock) (NSString *str);`
+
+block作用：跟函数和方法很想，其实就是用来保存一段代码，等到恰当的时候再去使用
+
+#### 应用沙盒
+
+* Documents,保存应用运行时生成的需要持久化的数据，itunes同步设备时会备份该目录
+* tem保存应用运行时所需要的临时数据，使用完毕后将相应的文件从该目录删除，应用没有运行时，系统也可能会清楚该目录下的文件，itunes同步设备时不会备份该目录
+* library/caches保存应用运行时声称的需要持久化的数据，itunes同步设备时不会备份
+* library/preference 保存应用所在的所有偏好设置，itunes同步设备会备份该目录
+
+ ` NSHomeDirectory()` 获取应用沙盒地址
+
+* 获取cache文件路径
+* NSSearchPathForDirectory 搜索的目录
+
+* NSSearchPathDomainMask：搜索范围 NSUserDomainMask表示在用户手机上查找
+
+* BOOL expandTilde 是否展开路径 如果没有展开，应用沙盒路径就是~
+
+ `NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask,YES);`
 
 
 
+#### 存储方式
+
+1. plist存储
+2. 偏好设置存储
+
+`NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults]`
+
+`[userDefaults setObject:@"zs"forKey:@"name"];`
+
+`[userDefaults synchronize]；`
+
+ 3.自定义归档
+
+```
+   调用方法
+     person *p =[[person alloc] init];
+    NSString *cache = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)[0];
+    NSString *filepath =[cache stringByAppendingPathComponent:@"person.data"];
+    
+    [NSKeyedArchiver archiveRootObject:p toFile:filepath];
+    
+    person *pr=[NSKeyedUnarchiver unarchiveObjectWithFile:filepath];
+    
+    实现协议
+    //归档的时候调用
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:_name forKey:@"name"];
+    [aCoder encodeInteger:_age forKey:@"age"];
+}
+//解档的时候调用
+//只要父类准售了NSCoding,就调用initWithCoder否则调用[super init]
+//解析文件的时候回调用该方法
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super init]) {
+        
+        self.name =[aDecoder decodeObjectForKey:@"name"];
+        self.age = [aDecoder decodeIntegerForKey:@"age"];
+        
+    }
+    return self;
+}
+```
+
+TableView的storyBoard中静态cell行数已经固定了，不能再代码中再做更改
 
 
 
+#### 模态弹出modal
 
-
-
-
-
+```
+    TwoViewController *twoVC =[[TwoViewController alloc] init];
+    
+    //模态变换
+    [self presentViewController:twoVC animated:YES completion:nil];
+        
+    //原理：就是把modal出来的控制器的View加到窗口最上面，期间这个控制器需要被强引用，
+    因为到了下一个控制器需要执行控制器上面类方法，所以不能被销毁，系统用presentViewController这个属性持有的
+    //实现步骤
+    //获取窗口
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    //添加控制器的View
+    [window addSubview:twoVC.view];
+    //往上平移一个控制器的高度
+    twoVC.view.transform =CGAffineTransformMakeScale(0, self.view.frame.size.height);
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        //清除型变
+        twoVC.view.transform  = CGAffineTransformIdentity;
+    }];
+    
+    
+    
+    [self dismissViewControllerAnimated:<#(BOOL)#> completion:<#^(void)completion#>];
+```
 
 
 
