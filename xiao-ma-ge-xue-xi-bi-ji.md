@@ -56,17 +56,69 @@ int main(int argc, char * argv[]) {
 
 
 
+#### KVC
+
+```
+ [model setValuesForKeysWithDictionary:dic];
+ [model enumerateKeysAndObjectsUsingBlock:^(id_Nonnull key, id_Nonnull obj, BOOL * _Nonnull stop) {
+ [model setValue:obj forKey:key];
+ }];
+```
+
+ setValue:forkey实现原理 
+
+1、先查看有没有对应key值得set方法,如果有set方法，就给对应的属性赋值
+
+ 2、如果没有set方法，就去查看有没有跟key值相同并且带有下划线的成员属性，如果有的话，就给带有下划线的成员属性赋值 
+
+3、如果咩有跟key值相同并且带有下划线的成员属性，还会去找有没有跟key值相同的名称的成员属性，如果有，就给他赋值
+
+4、如果没有直接报错
 
 
 
+#### 字符串copy和strong 
+
+字符串用copy原因外界修改不会改变字符串的值，在strong中的set方法是 \_name = name;而在copy方法中是\_name = \[name copy\];如果name是可变字符串就执行copy，如果不是就直接赋值
+
+#### 导航控制器
+
+```
+ UINavigationController *nav= [[UINavigationController alloc] initWithRootViewController:nil];
+    [nav pushViewController:nil animated:YES];
+```
+
+其中`initWithRootViewController`就是调用`[nav pushViewController:nil animated:YES]`方法来进行操作的
 
 
 
+#### View的声明周期
+
+1. ViewDidLoad\(懒加载,如果没释放只会调用一次\)
+2. ViewWillAPPear
+3. VIewWillLayoutSubviews
+4. VIewDidLayoutSubviews
+5. VIewWillLayoutSubviews
+6. VIewDidLayoutSubviews
+7. ViewDidAppear
 
 
 
+#### storyboard跳转
 
+1. 连线跳转 `[self performSegueWithIdentifier:@"" sender:nil];`
 
+**performSegueWithIdentifier底层实现**
+
+ 1、到storyboard当中去查找有没有给定标识的segue
+
+2、根据指定的标识，创建一个UIStoryboardSegue对象，把当前的控制器设置为UIStoryboardSegue的源控制器属性赋值（segue.sourceViewController），
+
+3、UIStoryboardSegue对象再去创建其目标控制器，给UIStoryboardSegue对象的目标控制器赋值（segue.destinationViewController）
+
+4、调用当前控制器的prepareForSegue:方法，会告诉用户，当前的线已经准备好了
+
+5、 执行\[segue perform\];方法，其实也就是执行 \[segue.sourceViewController.navigationController pushViewController:segue.destinationViewController animated:YES\];
 
 
 
