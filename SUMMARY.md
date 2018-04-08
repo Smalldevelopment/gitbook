@@ -11,4 +11,7 @@
 * [学习笔记](xiao-ma-ge-xue-xi-bi-ji.md)
 * [Swift学习笔记](swiftxue-xi-bi-ji.md)
   * [Swift &lt;二&gt; 逻辑分支和循环语句](swiftxue-xi-bi-ji/swift-4e8c3e-luo-ji-fen-zhi-he-xun-huan-yu-ju.md)
+  * [Swift&lt;三&gt;字符串](swiftxue-xi-bi-ji/swift4e093e-zi-fu-chuan.md)
+  * [Swift&lt;四&gt;数组与字典](swiftxue-xi-bi-ji/swift56db3e-shu-zu-yu-zi-dian.md)
+  * [Swift&lt;五&gt;类型转换和空和运算符](swiftxue-xi-bi-ji/swift4e943e-lei-xing-zhuan-huan-he-kong-he-yun-suan-fu.md)
 
