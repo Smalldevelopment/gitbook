@@ -5,7 +5,7 @@
 ```
 // swift 中,类是可以不继承父类的,那它本身就是rootClass
 class Person{
- 
+
  //方案一:
 var name : String
  init(){
@@ -37,6 +37,69 @@ class Person1:NSObject{
          self.name = ""
      }
 }
+```
+
+```
+class Stu {
+    //属性 实例属性 类型属性
+    //类型属性
+    static var personCount :Int = 0
+    //实例属性(存储属性,计算属性)
+    //存储属性:可以直接用来存储数值的属性
+    var name :String = ""
+    var age :Int = 0
+    var scoral :Double = 0
+    var scoral2 :Double = 0
+    //计算属性:并不是直接用来存储数值的,他是通过某写计算得来的数值
+    var avgScoral :Double = {
+        get{
+            return (scoral+scoral2)/2
+        }
+    } 
+    init(){
+        Stu.personCount+=1
+    }
+    deinit {
+        Stu.personCount-=1
+    }
+    //实例方法
+    func text() {
+     print("当前有\(Stu.personCount)人")
+    
+    }
+    //类方法
+    //static修饰不能被重写
+    static func PrintCount{
+        
+        print("当前有\(Stu.personCount)人")
+
+    }
+}
+var p :Stu? = Stu()
+var p1 :Stu? = Stu()
+var p2 :Stu? = Stu()
+Stu.personCount
+p = nil
+p1 = nil
+p2 = nil
+Stu.personCount
+```
+
+###### 析构函数
+
+```
+class Stu: NSObject{
+
+    var name:String = ""
+    var age:Int = 0
+    // 析构函数 == OC 中的dealloc
+    deinit {
+        print("对像被释放了")
+    }
+}
+
+var s:Stu? = Stu()
+s = nil
 ```
 
 
