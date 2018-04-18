@@ -16,4 +16,5 @@
   * [Swift&lt;五&gt;类型转换和空和运算符](swiftxue-xi-bi-ji/swift4e943e-lei-xing-zhuan-huan-he-kong-he-yun-suan-fu.md)
   * [Swift&lt;六&gt;枚举和结构体](swiftxue-xi-bi-ji/swift516d3e-mei-ju-he-jie-gou-ti.md)
   * [Swift&lt;七&gt; 类的基本使用](swiftxue-xi-bi-ji/swift4e033e-lei-de-ji-ben-shi-yong.md)
+* [Swift &lt;GCD&gt;](swift-gcd.md)
 
