@@ -8,25 +8,23 @@
 
 四、空合运算符
 
-
-
 #### KVO 的使用
 
 ```
 class Stuu: NSObject {
     var name: String?
     var age: Int?
-    
+
     init(dic:[String: Any]) {
 //        let name = dic["name"] as? String ?? ""
 //        let age = dic["age"] as? Int ?? 0
 //        self.name = name
 //        self.age = age
-        
+
         //kvc实现  再次之前必须调用父类的Init的进行初始化
         super.init()
         setValuesForKeys(dic)
-        
+
     }
 }
 
@@ -42,16 +40,28 @@ class Stu: NSObject {
     var name: String?
     var age: Int?
     var score: Int?
-    
+
     //析构函数 == OC 里面的dealloc
     deinit {
         print("对象释放了")
     }
     //OC 里面ARC 管理是什么对象？ OC对象
-    
+
 }
 
 var s: Stu? = Stu()
+```
+
+#### swift输出
+
+```
+func BHLog<T>(_ message: T, file: String = #file, line: Int = #line) {
+    
+    #if DEBUG
+    let fileName = (file as NSString).lastPathComponent
+    print("\(fileName):(\(line))-\(message)")
+    #endif
+}
 ```
 
 
