@@ -102,39 +102,182 @@
 - (void)moveToPoint:(CGPoint)point;
 ```
 
+* 添加直线
+
+```
+/**
+  * 该方法将会从 currentPoint 到 指定点 链接一条直线. 
+  * Note: 在追加完这条直线后, 该方法将会更新 currentPoint 为 指定点
+  *       调用该方法之前, 你必须先设置 currentPoint. 如果当前绘制路径
+  *       为空, 并且未设置 currentPoint, 那么调用该方法将不会产生任何
+  *       效果.
+  * @param point:   绘制直线的终点坐标, 当前坐标系统中的某一点
+  */
+- (void)addLineToPoint:(CGPoint)point;
+```
+
+* 添加弧线
+
+/\*\*
+
+  \* 该方法将会从 currentPoint 添加一条指定的圆弧.
+
+  \* 该方法的介绍和构造方法中的一样. 请前往上文查看
+
+  \* @param center: 圆心
+
+  \* @param radius: 半径
+
+  \* @param startAngle: 起始角度
+
+  \* @param endAngle: 结束角度
+
+  \* @param clockwise: 是否顺时针绘制
+
+  \*/
+
+- \(void\)addArcWithCenter:\(CGPoint\)center 
+
+                  radius:\(CGFloat\)radius 
+
+              startAngle:\(CGFloat\)startAngle 
+
+                endAngle:\(CGFloat\)endAngle 
+
+               clockwise:\(BOOL\)clockwise NS\_AVAILABLE\_IOS\(4\_0\);
+
+* 添加一条三次贝塞尔曲线
+
+```
+/**
+  * 该方法将会从 currentPoint 到 指定的 endPoint 追加一条三次贝塞尔曲线.
+  * 三次贝塞尔曲线的弯曲由两个控制点来控制. 如下图所示
+  * Note: 调用该方法前, 你必须先设置 currentPoint, 如果路径为空, 
+  *       并且尚未设置 currentPoint, 调用该方法则不会产生任何效果. 
+  *       当添加完贝塞尔曲线后, 该方法将会自动更新 currentPoint 为
+  *       指定的结束点
+  * @param endPoint: 终点
+  * @param controlPoint1: 控制点1
+  * @param controlPoint2: 控制点2
+  */
+- (void)addCurveToPoint:(CGPoint)endPoint 
+          controlPoint1:(CGPoint)controlPoint1 
+          controlPoint2:(CGPoint)controlPoint2;
+```
+
+![](/assets/2452150-fabfa795e061d718.jpg)
+
+* 添加一条二次贝塞尔曲线
+
+```
+/**
+  * 该方法将会从 currentPoint 到 指定的 endPoint 追加一条二次贝塞尔曲线.
+  * currentPoint、endPoint、controlPoint 三者的关系最终定义了二次贝塞尔曲线的形状.
+  * 二次贝塞尔曲线的弯曲由一个控制点来控制. 如下图所示
+  * Note: 调用该方法前, 你必须先设置 currentPoint, 如果路径为空, 
+  *       并且尚未设置 currentPoint, 调用该方法则不会产生任何效果. 
+  *       当添加完贝塞尔曲线后, 该方法将会自动更新 currentPoint 为
+  *       指定的结束点
+  * @param endPoint: 终点
+  * @param controlPoint: 控制点
+  */
+- (void)addQuadCurveToPoint:(CGPoint)endPoint 
+               controlPoint:(CGPoint)controlPoint;
+```
+
+![](/assets/2452150-3d4952efead3a84c.jpg)
+
+* 关闭子路径（连接一条线到起点）
+
+```
+/**
+  * 该方法将会从 currentPoint 到子路经的起点 绘制一条直线, 
+  * 以此来关闭当前的自路径. 紧接着该方法将会更新 currentPoint
+  * 为 刚添加的这条直线的终点, 也就是当前子路经的起点.
+  */
+- (void)closePath;
+```
+
+* 删除所有路径（点）
+
+```
+- (void)removeAllPoints;
+```
+
+* 将指定的UIBezierPath中的内容添加到当前UIBezierPath中
+
+```
+/**
+  * 该方法将会在当前 UIBezierPath 对象的路径中追加
+  * 指定的 UIBezierPath 对象中的内容. 
+  */
+- (void)appendPath:(UIBezierPath *)bezierPath;
+```
+
+#### 绘图属性
+
+* 线宽
+
+    /**
+      * 线宽属性定义了 `UIBezierPath` 对象中绘制的曲线规格. 默认为: 1.0
+      */
+    @property(nonatomic) CGFloat lineWidth;
+
+* 曲线终点样式
+
+```
+/**
+  * 该属性应用于曲线的终点和起点. 该属性在一个闭合子路经中是无效果的. 默认为: kCGLineCapButt
+  */
+@property(nonatomic) CGLineCap lineCapStyle;
 
 
+// CGPath.h
+/* Line cap styles. */
+typedef CF_ENUM(int32_t, CGLineCap) {
+    kCGLineCapButt,
+    kCGLineCapRound,
+    kCGLineCapSquare
+};
+```
+
+![](/assets/2452150-cd1b858ce7df9dd6.png.jpeg)
+
+* 曲线连接样式
+
+```
+/**
+  * 默认为: kCGLineJoinMiter.
+  */
+@property(nonatomic) CGLineJoin lineJoinStyle;
 
 
+// CGPath.h
+/* Line join styles. */
+typedef CF_ENUM(int32_t, CGLineJoin) {
+    kCGLineJoinMiter,
+    kCGLineJoinRound,
+    kCGLineJoinBevel
+};
+```
 
+![](/assets/2452150-71112236fff490b8.png.jpeg)
 
+* 内角和外角的距离
 
+```
+/**
+  * 两条线交汇处内角和外角之间的最大距离, 只有当连接点样式为 kCGLineJoinMiter
+  * 时才会生效，最大限制为10
+  * 我们都知道, 两条直线相交时, 夹角越小, 斜接长度就越大.
+  * 该属性就是用来控制最大斜接长度的.
+  * 当我们设置了该属性, 如果斜接长度超过我们设置的范围, 
+  * 则连接处将会以 kCGLineJoinBevel 连接类型进行显示.
+  */
+@property(nonatomic) CGFloat miterLimit;
+```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+![](/assets/2452150-d6647c67c61e87c6.png.jpeg)
 
 
 
