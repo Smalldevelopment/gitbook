@@ -422,7 +422,6 @@ typedef CF_ENUM(int32_t, CGLineJoin) {
   *       那么当前路径也被看做不为空.
   */
 @property (readonly, getter=isEmpty) BOOL empty;
-
 ```
 
 * 路径覆盖的矩形区域
@@ -445,5 +444,40 @@ typedef CF_ENUM(int32_t, CGLineJoin) {
 - (void)applyTransform:(CGAffineTransform)transform;
 ```
 
+#### 画个虚线
 
+```
+    UIBezierPath *path =[UIBezierPath bezierPath];
+    [path moveToPoint:CGPointMake(10, 50)];
+    [path addLineToPoint:CGPointMake(300, 50)];
+    path.lineWidth = 2;
+    [[UIColor redColor] set];
+   
+    
+    UIBezierPath *path1 =[UIBezierPath bezierPath];
+    [path1 moveToPoint:CGPointMake(10, 100)];
+    [path1 addLineToPoint:CGPointMake(300, 100)];
+    path1.lineWidth = 2;
+   
+    UIBezierPath *path2 =[UIBezierPath bezierPath];
+    [path2 moveToPoint:CGPointMake(10, 150)];
+    [path2 addLineToPoint:CGPointMake(300, 150)];
+    path2.lineWidth = 2;
+   
+    
+    CGFloat dash[] = {20.0,10.0};
+    CGFloat dash1[] = {20.0,10.0,40.0,20.0};
+    CGFloat dash2[] = {30.0,10.0};
+    [path setLineDash:dash count:2 phase:0];
+    // 注意这里如果是三那个只会用到20，10，40，后面的20用不到
+    [path1 setLineDash:dash1 count:3 phase:0];
+    [path2 setLineDash:dash2 count:2 phase:2];
+    
+    
+     [path stroke];
+     [path1 stroke];
+     [path2 stroke];
+```
+
+![](/assets/Snip20180426_20.png)
 
