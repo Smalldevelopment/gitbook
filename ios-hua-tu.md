@@ -116,7 +116,7 @@ CGContextStrokePath(ctx);
  UIBezierPath *path = [UIBezierPath bezierPath];
  [path moveToPoint:CGPointMake(50, 280)];
  [path addQuadCurveToPoint:CGPointMake(250, 280) controlPoint:CGPointMake(50, 50)];
-    
+
  CGContextAddPath(ctx, path.CGPath);
   CGContextStrokePath(ctx);
 ```
