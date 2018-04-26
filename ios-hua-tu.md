@@ -4,7 +4,7 @@
 
 ---
 
-> #####    以下操作在均在自定义View的drawRect方法中
+> ##### 以下操作在均在自定义View的drawRect方法中
 
 #### 画线条
 
@@ -22,11 +22,11 @@ UIBezierPath *path = [UIBezierPath bezierPath];
 [path moveToPoint:CGPointMake(50, 200)];
 //添加一条线的终点
 [path addLineToPoint:CGPointMake(280, 50)];
-    
+
 //画第二条线
 [path moveToPoint:CGPointMake(100, 200)];
 [path addLineToPoint:CGPointMake(250, 100)];
-    
+
 //把上一条线的终点当做下一天线的起点
 [path addLineToPoint:CGPointMake(200, 200)];
 ```
@@ -76,40 +76,52 @@ CGContextStrokePath(ctx);
     UIBezierPath *path = [UIBezierPath bezierPath];
     [path moveToPoint:CGPointMake(20, 150)];
     [path addLineToPoint:CGPointMake(280, 150)];
-    
+
     //3.把路径添加到上下文当中.
     CGContextAddPath(ctx, path.CGPath);
-    
+
     //保存当前上下文的状态(第一次保存)
     CGContextSaveGState(ctx);
-    
+
     //设置上下文的状态
     CGContextSetLineWidth(ctx, 10);
     [[UIColor redColor] set];
-    
+
     //保存当前上下文的状态(第二次保存)
     CGContextSaveGState(ctx);
-    
+
     //4.把上下文当中的内容渲染View
     CGContextStrokePath(ctx);
-   
+
     UIBezierPath *path2 = [UIBezierPath bezierPath];
     [path2 moveToPoint:CGPointMake(150, 20)];
     [path2 addLineToPoint:CGPointMake(150, 280)];
     //把路径添加到上下文当中.
     CGContextAddPath(ctx, path2.CGPath);
-    
+
     //从上下文状态栈当中恢复上下文的状态（取出保存两次的）
      CGContextRestoreGState(ctx);
      CGContextRestoreGState(ctx);
-    
+
     //把上下文当中的内容渲染View
     CGContextStrokePath(ctx);
 ```
 
 ![](/assets/Snip20180426_12.png)
 
+#### 画曲线
 
+```
+ CGContextRef ctx = UIGraphicsGetCurrentContext();
+ UIBezierPath *path = [UIBezierPath bezierPath];
+ [path moveToPoint:CGPointMake(50, 280)];
+ [path addQuadCurveToPoint:CGPointMake(250, 280) controlPoint:CGPointMake(50, 50)];
+    
+ CGContextAddPath(ctx, path.CGPath);
+  CGContextStrokePath(ctx);
+```
+
+#### ![](/assets/Snip20180425_4.png)
 
 #### 画矩形
 
@@ -120,9 +132,9 @@ CGContextRef ctx = UIGraphicsGetCurrentContext();
 //  UIBezierPath *path = [UIBezierPath bezierPathWithRect:CGRectMake(50, 50, 100, 180)];
 //圆角矩形
 UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(50, 50, 180, 100) cornerRadius:50];
-    
+
 CGContextAddPath(ctx, path.CGPath);
-    
+
 // CGContextStrokePath(ctx);
 CGContextFillPath(ctx);
 ```
@@ -137,7 +149,7 @@ UIBezierPath *path = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(50, 50, 1
 //使用UIBezier提佛那个的绘图方法
 // [path fill];
 //只有在drawRect方法中才可以，因为默认调用了下面的获取上下门的方法
-[path stroke]; 
+[path stroke];
 ```
 
 ![](/assets/Snip20180425_5.png)
@@ -152,21 +164,19 @@ UIBezierPath *path = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(50, 50, 1
 //截止角度
 //YES 顺时针 NO逆时针
 CGPoint center = CGPointMake(rect.size.width * 0.5, rect.size.height * 0.5);
-    
+
 UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:center radius:50 startAngle:0 endAngle:-M_PI_2 clockwise:NO];
 //添加一条线到圆心
 [path addLineToPoint:center];
 //关闭路径closePath: 从路径重点连接一根线到路径的起点
 [path closePath];
-    
+
 [path stroke];
 ```
 
 ![](/assets/Snip20180425_9.png)
 
-> 小记：如果想主动调用`drawRect： `方法可以调用View的`setNeedsDisplay`方法
-
-
+> 小记：如果想主动调用`drawRect：`方法可以调用View的`setNeedsDisplay`方法
 
 画大饼
 
@@ -176,22 +186,22 @@ CGPoint center = CGPointMake(rect.size.width * 0.5, rect.size.height * 0.5);
 CGFloat radius = rect.size.width * 0.5 - 40 ;
 CGFloat endA = 0.25 * M_PI * 2;
 UIBezierPath * path = [UIBezierPath bezierPathWithArcCenter:center radius:radius startAngle: 0 endAngle:endA clockwise:YES];
-    
+
 [[UIColor redColor] set];
 [path addLineToPoint:center];
 [path fill];
-    
-    
+
+
 CGFloat endA2 = endA + (0.25 * M_PI * 2) ;
 UIBezierPath * path2 =[UIBezierPath bezierPathWithArcCenter:center radius:radius startAngle:endA endAngle:endA2 clockwise:YES];
-    
+
 [[UIColor greenColor] set];
 [path2 addLineToPoint:center];
 [path2 fill];
-    
+
 CGFloat endA3 = endA2 + (0.5 * M_PI * 2) ;
 UIBezierPath * path3 =[UIBezierPath bezierPathWithArcCenter:center radius:radius startAngle:endA2 endAngle:endA3 clockwise:YES];
-    
+
 [[UIColor yellowColor] set];
 [path3 addLineToPoint:center];
 [path3 fill];
