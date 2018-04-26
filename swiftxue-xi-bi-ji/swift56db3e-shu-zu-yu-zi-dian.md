@@ -1,12 +1,12 @@
 #### 数组
 
-* 可变数组
+** 可变数组 **
 
 ```
 let arr: [Any] = [1,2,3]
 ```
 
-* 不可变数组
+** 不可变数组**
 
 ```
 let arr: [Any] = [1,2,3]
@@ -29,7 +29,7 @@ array.count //个数
 array.capacity //容量
 ```
 
-* 数组遍历
+** 数组遍历**
 
 ```
 for j in 0..<array.count {
@@ -55,7 +55,7 @@ for (index,value) in array.enumerated() {
  var dic : [String : Any] = ["a":1, "b":"2"] //可变 
 ```
 
-* 增
+** 增**
 
 ```
 dic["c"] = 2
@@ -64,7 +64,7 @@ dic.updateValue(2,forKey:"c")
 //以上两种如原字典中已存此key,则修改value ,否则新增该键值对
 ```
 
-* 删
+** 删**
 
 ```
 dic.removeValue(forKey:"a")
@@ -73,7 +73,7 @@ let index = dic.index(forKey:"a")
 dic.remove(at:index)
 ```
 
-* 查
+** 查**
 
 ```
 for (key,value) in dic{

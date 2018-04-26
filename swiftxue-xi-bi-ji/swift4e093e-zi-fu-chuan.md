@@ -1,17 +1,15 @@
 #### 1、字符串的基本使用
 
-* [ ] **OC与Swift字符串的区别**
+**OC与Swift字符串的区别**
 
-* OC 中使用字符串类型是NSSting,Swift 中使用的字符串类型是String
-* OC中使用的是@“”，Swift用在“”
+> OC 中使用字符串类型是NSSting,Swift 中使用的字符串类型是String
+> OC中使用的是@“”，Swift用在“”
+>  使用String的原因
+> String是一个结构体，性能更高（保存的是直接的值）
+> NSString是OC的一个对象，性能略差
+> String支持遍历
 
-* [ ] 使用String的原因
-
-* String是一个结构体，性能更高（保存的是直接的值）
-* NSString是OC的一个对象，性能略差
-* String支持遍历
-
-* [ ] 常见使用
+ ** 常见使用 **
 
 ```
 var str = "傲慢与偏见"
