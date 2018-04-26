@@ -120,31 +120,33 @@
 
 /\*\*
 
-  \* 该方法将会从 currentPoint 添加一条指定的圆弧.
+\* 该方法将会从 currentPoint 添加一条指定的圆弧.
 
-  \* 该方法的介绍和构造方法中的一样. 请前往上文查看
+\* 该方法的介绍和构造方法中的一样. 请前往上文查看
 
-  \* @param center: 圆心
+\* @param center: 圆心
 
-  \* @param radius: 半径
+\* @param radius: 半径
 
-  \* @param startAngle: 起始角度
+\* @param startAngle: 起始角度
 
-  \* @param endAngle: 结束角度
+\* @param endAngle: 结束角度
 
-  \* @param clockwise: 是否顺时针绘制
+\* @param clockwise: 是否顺时针绘制
 
-  \*/
+\*/
 
-- \(void\)addArcWithCenter:\(CGPoint\)center 
+* \(void\)addArcWithCenter:\(CGPoint\)center
 
-                  radius:\(CGFloat\)radius 
+  ```
+              radius:\(CGFloat\)radius 
 
-              startAngle:\(CGFloat\)startAngle 
+          startAngle:\(CGFloat\)startAngle 
 
-                endAngle:\(CGFloat\)endAngle 
+            endAngle:\(CGFloat\)endAngle 
 
-               clockwise:\(BOOL\)clockwise NS\_AVAILABLE\_IOS\(4\_0\);
+           clockwise:\(BOOL\)clockwise NS\_AVAILABLE\_IOS\(4\_0\);
+  ```
 
 * 添加一条三次贝塞尔曲线
 
@@ -218,10 +220,11 @@
 
 * 线宽
 
-    /**
-      * 线宽属性定义了 `UIBezierPath` 对象中绘制的曲线规格. 默认为: 1.0
-      */
-    @property(nonatomic) CGFloat lineWidth;
+  /\*\*
+
+  * 线宽属性定义了 `UIBezierPath` 对象中绘制的曲线规格. 默认为: 1.0
+    \*/
+    @property\(nonatomic\) CGFloat lineWidth;
 
 * 曲线终点样式
 
@@ -278,6 +281,144 @@ typedef CF_ENUM(int32_t, CGLineJoin) {
 ```
 
 ![](/assets/2452150-d6647c67c61e87c6.png.jpeg)
+
+* 渲染精度
+
+```
+/**
+  * 该属性用来确定渲染曲线路径的精确度.
+  * 该属性的值用来测量真实曲线的点和渲染曲线的点的最大允许距离.
+  * 值越小, 渲染精度越高, 会产生相对更平滑的曲线, 但是需要花费更
+  * 多的计算时间. 值越大导致则会降低渲染精度, 这会使得渲染的更迅
+  * 速. flatness 的默认值为 0.6.
+  * Note: 大多数情况下, 我们都不需要修改这个属性的值. 然而当我们
+  *       希望以最小的消耗去绘制一个临时的曲线时, 我们也许会临时增
+  *       大这个值, 来获得更快的渲染速度.
+  */
+
+@property(nonatomic) CGFloat flatness;
+```
+
+* 虚线
+
+```
+/**
+  * @param pattern: 该属性是一个 C 语言的数组, 其中每一个元素都是 CGFloat
+  *                 数组中的元素代表着线段每一部分的长度, 第一个元素代表线段的第一条线,
+  *                 第二个元素代表线段中的第一个间隙. 这个数组中的值是轮流的. 来解释一下
+  *                 什么叫轮流的. 
+  *                 举个例子: 声明一个数组 CGFloat dash[] = @{3.0, 1.0}; 
+  *                 这意味着绘制的虚线的第一部分长度为3.0, 第一个间隙长度为1.0, 虚线的
+  *                 第二部分长度为3.0, 第二个间隙长度为1.0. 以此类推.
+
+  * @param count: 这个参数是 pattern 数组的个数
+  * @param phase: 这个参数代表着, 虚线从哪里开始绘制.
+  *                 举个例子: 这是 phase 为 6. pattern[] = @{5, 2, 3, 2}; 那么虚线将会
+  *                 第一个间隙的中间部分开始绘制, 如果不是很明白就请继续往下看,
+  *                 下文实战部分会对虚线进行讲解.
+  */
+- (void)setLineDash:(const CGFloat *)pattern
+              count:(NSInteger)count
+              phase:(CGFloat)phase;
+```
+
+* 重新获取虚线样式
+
+```
+/**
+  * 该方法可以重新获取之前设置过的虚线样式.
+  *  Note:  pattern 这个参数的容量必须大于该方法返回数组的容量.
+  *         如果无法确定数组的容量, 那么可以调用两次该方法, 第一次
+  *         调用该方法的时候, 传入 count 参数, 然后在用 count 参数
+  *         来申请 pattern 数组的内存空间. 然后再第二次正常的调用该方法
+  */
+- (void)getLineDash:(CGFloat *)pattern 
+              count:(NSInteger *)count
+              phase:(CGFloat *)phase;
+```
+
+#### 绘制路径
+
+* 填充
+
+```
+/**
+  * 该方法当前的填充颜色 和 绘图属性对路径的封闭区域进行填充.
+  * 如果当前路径是一条开放路径, 该方法将会隐式的将路径进行关闭后进行填充
+  * 该方法在进行填充操作之前, 会自动保存当前绘图的状态, 所以我们不需要
+  * 自己手动的去保存绘图状态了. 
+  */
+- (void)fill;
+```
+
+* 描边
+
+```
+- (void)stroke;
+```
+
+* 混合
+
+```
+/**
+  * 该方法当前的填充颜色 和 绘图属性 (外加指定的混合模式 和 透明度) 
+  * 对路径的封闭区域进行填充. 如果当前路径是一条开放路径, 该方法将
+  * 会隐式的将路径进行关闭后进行填充
+  * 该方法在进行填充操作之前, 会自动保存当前绘图的状态, 所以我们不需要
+  * 自己手动的去保存绘图状态了. 
+  *
+  * @param blendMode: 混合模式决定了如何和已经存在的被渲染过的内容进行合成
+  * @param alpha: 填充路径时的透明度
+  */
+- (void)fillWithBlendMode:(CGBlendMode)blendMode 
+                    alpha:(CGFloat)alpha;
+
+- (void)strokeWithBlendMode:(CGBlendMode)blendMode
+                      alpha:(CGFloat)alpha;
+```
+
+#### 路径剪切
+
+```
+/**
+  *  该方法将会修改当前绘图上下文的可视区域.
+  *  当调用这个方法之后, 会导致接下来所有的渲染
+  *  操作, 只会在剪切下来的区域内进行, 区域外的
+  *  内容将不会被渲染.
+  *  如果你希望执行接下来的绘图时, 删除剪切区域,
+  *  那么你必须在调用该方法前, 先使用 CGContextSaveGState 方法
+  *  保存当前的绘图状态, 当你不再需要这个剪切区域
+  *  的时候, 你只需要使用 CGContextRestoreGState 方法
+  *  来恢复之前保存的绘图状态就可以了.
+  */
+- (void)addClip;
+```
+
+#### 一些判断
+
+* 是否包含某个点
+
+
+
+* 路径是否为空
+
+
+
+* 路径覆盖的矩形区域
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
