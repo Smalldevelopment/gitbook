@@ -1,4 +1,4 @@
-#### 图片圆角
+#### 图片圆角 {#swift}
 
 ##### 具体方法和画图操作基本差不过，主要分为以下几个步骤
 
@@ -8,31 +8,31 @@
 UIGraphicsBeginImageContextWithOptions(img.size, false, 0.0)
 ```
 
-   2. **描述路径**
+1. **描述路径**
 
 ```
 let path: UIBezierPath = UIBezierPath.init(ovalIn: CGRect(x: 0,y: 0,width: img.size.width,height: img.size.height))
 ```
 
-   3. **开始剪切**
+1. **开始剪切**
 
 ```
 path.addClip()
 ```
 
-   4. **开始绘制**
+1. **开始绘制**
 
 ```
 img.draw(at: CGPoint(x: 0,y: 0))
 ```
 
-   5. **生成图片**
+1. **生成图片**
 
 ```
 let newImg: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
 ```
 
-   6. **关闭路径**
+1. **关闭路径**
 
 ```
 UIGraphicsEndImageContext()
@@ -46,15 +46,15 @@ UIGraphicsEndImageContext()
     /// - Parameter img: 传入图片
     /// - Returns: 传出新图片
    static func imgeRoundedCorners(img: UIImage) -> UIImage{
-    
+
         UIGraphicsBeginImageContextWithOptions(img.size, false, 0.0)
         let path: UIBezierPath = UIBezierPath.init(ovalIn: CGRect(x: 0,y: 0,width: img.size.width,height: img.size.height))
         path.addClip()
         img.draw(at: CGPoint(x: 0,y: 0))
-        
+
         let newImg: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
-        
+
         return newImg
     }
 ```
@@ -70,24 +70,24 @@ UIGraphicsEndImageContext()
     ///   - color: 边框颜色
     /// - Returns: 返回生成的新图片
    static func imgBorderRoundedCorners(img: UIImage, space: CGFloat, color: UIColor) -> UIImage{
-    
+
         let imgSize: CGSize = CGSize(width: img.size.width + 2 * space, height: img.size.height + 2 * space)
-        
-        
+
+
         UIGraphicsBeginImageContextWithOptions(imgSize, false, 0.0)
         let path: UIBezierPath = UIBezierPath.init(ovalIn: CGRect(x: 0,y: 0,width: imgSize.width,height: imgSize.height))
-        
+
         color.set()
         path.fill()
-        
+
         let path1: UIBezierPath = UIBezierPath.init(ovalIn: CGRect(x: space, y: space, width: img.size.width, height: img.size.height))
-        
+
         path1.addClip()
         img.draw(at: CGPoint(x: space,y: space))
-        
+
         let newImg: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
-        
+
         return newImg
     }
 ```
@@ -102,15 +102,15 @@ UIGraphicsEndImageContext()
     ///   - view: 在那个View上截屏
     /// - Returns: 返回一个图片
     static func imgScreenshots(size: CGSize, in view: UIView) -> UIImage {
-        
+
         UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
         // 离屏渲染
         view.layer.render(in: UIGraphicsGetCurrentContext()!)
-        
+
         let imgNew: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
-        
+
         UIGraphicsEndImageContext()
-        
+
         return imgNew
     }
 ```
@@ -125,10 +125,10 @@ UIGraphicsEndImageContext()
   //保存完成后回调的方法
   //保存完成后，会回调方法的contextinfo中
   UIImageWriteToSavedPhotosAlbum(imgNew, self, #selector(imgSaveDidFinish(img:error:)), nil)
-  
+
   //保存成功后回调方法
    @objc func imgSaveDidFinish(img: UIImage, error: NSError) {
-        
+
     }
 ```
 
@@ -144,50 +144,6 @@ UIGraphicsEndImageContext()
             print("成功： \(success)  错误：\(String(describing: error))")
   }
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
