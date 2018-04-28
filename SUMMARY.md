@@ -19,4 +19,5 @@
 * [Swift &lt;GCD&gt;](swift-gcd.md)
 * [iOS 画图](ios-hua-tu.md)
 * [UIBezierPath 介绍](uibezierpath-jie-shao.md)
+* [Swift  截屏、绘制圆角、保存相册](swift-jie-ping-3001-hui-zhi-yuan-jiao-3001-bao-cun-xiang-ce.md)
 
